@@ -6,3 +6,5 @@ import re
 Direccion= 'http://www.imdb.com/chart/top'
 respuesta = requests.get(Direccion)
 soup = BeautifulSoup(respuesta.text, "html.parser")
+
+pelicula=soup.selected('td.titleColumn')
