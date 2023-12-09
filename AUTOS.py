@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+from sqlalchemy import create_engine
 
 sitio = 'https://www.cars.com/shopping/results/?stock_type=cpo&makes%5B%'
 respuesta = requests.get(sitio)
