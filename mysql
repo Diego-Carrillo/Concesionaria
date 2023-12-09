@@ -1,0 +1,28 @@
+# Limpia los datos en la columna Precio
+clean_price_query = " UPDATE concesionaria SET Precio = REPLACE(REPLACE(Precio, '$', ''), ',', '') WHERE Precio LIKE '%$%' OR Precio LIKE '%,%'; "
+execute_query(clean_price_query, engine)
+
+
+# Cambia el tipo de la columna Precio a INT
+alter_price_query = "ALTER TABLE concesionaria MODIFY Precio INT;"
+
+execute_query(alter_price_query, engine)
+
+NO FUI CAPAZ DE CORRER NINGUNA DE LAS DOS MODIFICACIONES EN PYTHON TOSOA LOS DATOS DE LA PAGINA SE GUARDAN COMO TEXTO, LO CONVERTI DIRECTO DESDE MYSQL LA COLUMNA DE PRECIO:
+
+create database concesionaria;
+use concesionaria;
+show tables;
+
+select * from concesionaria;
+
+describe concesionaria;
+
+drop database concesionaria;
+
+UPDATE concesionaria SET Precio = REPLACE(REPLACE(Precio, '$', ''), ',', '') WHERE Precio LIKE '%$%' OR Precio LIKE '%,%';
+ALTER TABLE concesionaria MODIFY Precio INT;
+
+UPDATE concesionaria SET Millaje = REPLACE(REPLACE(Millaje, 'mi.', ''), ',', '') WHERE Millaje LIKE '%mi.%' OR Precio LIKE '%,%';
+ALTER TABLE concesionaria MODIFY Millaje INT;
+
