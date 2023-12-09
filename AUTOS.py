@@ -3,6 +3,17 @@ import requests
 import pandas as pd
 from sqlalchemy import create_engine
 
+# Datos de la BD
+usuario = 'root'
+contraseña = 'Airsoud99.'
+host = 'localhost'  # o la dirección del servidor
+puerto = '3306'
+db = 'concesionaria'
+
+# Creando la conexión
+engine = create_engine(f'mysql+pymysql://{usuario}:{contraseña}@{host}:{puerto}/{db}')
+
+
 sitio = 'https://www.cars.com/shopping/results/?stock_type=cpo&makes%5B%'
 respuesta = requests.get(sitio)
 respuesta.status_code
