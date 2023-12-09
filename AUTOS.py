@@ -95,4 +95,5 @@ print(Concesionaria)
 
 Concesionaria['Numero de Reviews'] = Concesionaria['Numero de Reviews'].apply(lambda x: x.strip('reviews)').strip('('))
 
-Concesionaria.to_csv('datasets/Concesionaria.csv', index=False)
+
+Concesionaria.to_sql('concesionaria', con=engine, index=False, if_exists='append')
