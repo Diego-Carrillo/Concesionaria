@@ -50,12 +50,16 @@ app.layout = dbc.Container([
         ], width=8)
     ]),
     dbc.Row([
-        dbc.Col(dcc.Graph(id='graph-precio'), width=12)
+        dbc.Col(dcc.Graph(id='graph-precio'), width=6),
+        dbc.Col(dcc.Graph(id='scatter-plot'), width=6),
+    ], style=style_black_background),
+    dbc.Row([
+        dbc.Col(dcc.Graph(id='box-plot'), width=6),
+        # Añade más gráficos aquí según sea necesario
     ], style=style_black_background)
 ], fluid=True, style=style_black_background)
 
-
-# Callback para actualizar las estadísticas y el gráfico de precio basado en la selección de la marca
+# Callback para actualizar las estadísticas y los gráficos basados en la selección de la concesionaria
 @app.callback(
     [
         Output('stat-media', 'children'),
@@ -63,33 +67,32 @@ app.layout = dbc.Container([
         Output('stat-moda', 'children'),
         Output('stat-desviacion', 'children'),
         Output('stat-rango', 'children'),
-        Output('graph-precio', 'figure')
+        Output('graph-precio', 'figure'),
+        Output('scatter-plot', 'figure'),
+        Output('box-plot', 'figure')
     ],
     [Input('Concesionaria-dropdown', 'value')]
 )
 def update_output(selected_concesionaria):
     filtered_df = df[df['Concesionaria'] == selected_concesionaria]
-
-    # Calcular estadísticas descriptivas
     media_precio = filtered_df['Precio'].mean()
     mediana_precio = filtered_df['Precio'].median()
     moda_precio = filtered_df['Precio'].mode()[0]
     desviacion_estandar_precio = filtered_df['Precio'].std()
     rango_precio = filtered_df['Precio'].max() - filtered_df['Precio'].min()
-
-    # Actualizar gráfico de precio
-    fig = px.bar(filtered_df, x='Nombre', y='Precio', title=f'Precios de los Vehículos de {selected_concesionaria}')
-    fig.update_layout(plot_bgcolor='black', paper_bgcolor='black', font_color='white')
-
-    # Actualizar texto de estadísticas
-    media_text = f"Media: {media_precio:.2f}"
-    mediana_text = f"Mediana: {mediana_precio:.2f}"
-    moda_text = f"Moda: {moda_precio}"
-    desviacion_text = f"Desviación Estándar: {desviacion_estandar_precio:.2f}"
-    rango_text = f"Rango: {rango_precio:.2f}"
-
-    return media_text, mediana_text, moda_text, desviacion_text, rango_text, fig
-
+    fig_precio = px.bar(filtered_df, x='Nombre', y='Precio', title=f'Precios de los Vehículos de {selected_concesionaria}')
+    fig_scatter = px.scatter(filtered_df, x='Millaje', y='Precio', title=f'Relación entre Millaje y Precio en {selected_concesionaria}')
+    fig_box = px.box(filtered_df, y='Precio', title=f'Distribución de Precios en {selected_concesionaria}')
+    return (
+        f"Media: {media_precio:.2f}",
+        f"Mediana: {mediana_precio:.2f}",
+        f"Moda: {moda_precio}",
+        f"Desviación Estándar: {desviacion_estandar_precio:.2f}",
+        f"Rango: {rango_precio:.2f}",
+        fig_precio.update_layout(plot_bgcolor='black', paper_bgcolor='black', font_color='white'),
+        fig_scatter.update_layout(plot_bgcolor='black', paper_bgcolor='black', font_color='white'),
+        fig_box.update_layout(plot_bgcolor='black', paper_bgcolor='black', font_color='white')
+    )
 
 # Ejecutar la aplicación
 if __name__ == '__main__':
